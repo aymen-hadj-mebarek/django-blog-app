@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Blogs Page</title>
+{% endblock %}
+
+{% block content %}
+    <div class="blogs-container">
+        {% for blog in blogsList %}
+        <div class="blog-post">
+            <h2 class="blog-title">
+                <a href="{% url 'blog_details' blog.pk %}">{{ blog.title }}</a>
+            </h2>
+            <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
+            <hr>
+            <p class="blog-body">
+                {{ blog.body }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

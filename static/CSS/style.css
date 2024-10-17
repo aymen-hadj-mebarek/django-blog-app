@@ -1,0 +1,55 @@
+/* General styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Container for the blog posts */
+.blogs-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Individual blog post styling */
+.blog-post {
+    background-color: white;
+    margin: 20px 0;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Blog title */
+.blog-title a {
+    text-decoration: none;
+    color: #333;
+    font-size: 1.5em;
+    transition: color 0.3s ease;
+}
+
+.blog-title a:hover {
+    color: #007bff;
+}
+
+/* Author section */
+.blog-author {
+    font-size: 0.9em;
+    color: #777;
+}
+
+/* Blog content styling */
+.blog-body {
+    margin-top: 10px;
+    font-size: 1.1em;
+    line-height: 1.8;
+}
+
+/* Horizontal line */
+hr {
+    border: none;
+    height: 1px;
+    background: #ddd;
+}
