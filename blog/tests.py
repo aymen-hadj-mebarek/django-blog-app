@@ -59,3 +59,32 @@ class BlogTests(TestCase):
         no_response = self.client.get('/blog/10000/')    # he created a blog that doesnt exist to check its status code
         self.assertEqual(no_response.status_code, 404)
         
+    def test_get_absolute_url(self):
+        self.assertEqual(self.blog.get_absolute_url(), '/blog/1/') 
+        
+    def test_blog_create_view(self):
+        #! when testing a post form we use post with the infos we are going to post in the form
+        response = self.client.post(reverse('blog_new'), {
+            'title': 'new blog',
+            'body': 'this is the body of test blog',
+            'author': self.user
+        })
+        self.assertEqual(response.status_code, 200)
+        # testing that the url exists
+        # testing that the right things are placed : 
+        self.assertContains(response, 'new blog')
+        self.assertContains(response, 'this is the body of test blog')
+        
+    def test_blog_update_view(self):
+        response = self.client.post(reverse('blog_update', args='1'), {
+            'title': 'updated blog',
+            'body': 'this is the updated body of test blog',
+        })
+        self.assertEqual(response.status_code, 302)   # 302 means redirected to a new page
+        self.assertEqual(BlogModel.objects.get(pk=1).title, 'updated blog')
+        
+    def test_blog_delete_view(self):
+        response = self.client.post(reverse('blog_delete', args='1'))
+        self.assertEqual(response.status_code, 302)   # 302 means redirected to a new page
+        self.assertFalse(BlogModel.objects.filter(pk=self.blog.id).exists()) # this should check that the database is empty now
+        

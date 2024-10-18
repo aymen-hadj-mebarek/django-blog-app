@@ -1,0 +1,44 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    <title>{{ blog.title }}</title>
+{% endblock %}
+
+{% block content %}
+<div class="blog-post">
+    <h2 class="blog-title">
+        <a href="{% url 'blog_details' blog.pk %}">{{ blog.title }}</a>
+    </h2>
+    <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
+    <hr>
+    <p class="blog-body">
+        {{ blog.body }}
+    </p>
+    <a href="{% url 'blog_update' blog.pk %}">Update the blog</a>
+    <a href="{% url 'blog_delete' blog.pk %}">Delete the blog</a>
+</div>
+
+<form action="" method="POST" class="confirm_form" style="width: 100%;
+    height: 100vh;
+    background-color: rgba(255,255,255,0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;">
+    {% csrf_token %}
+    <!-- this is for security -->
+     <div class="container" style="border-radius: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+    padding: 50px;">
+        <p>Are you sure you want to delete the post {{blog.title}}</p>
+        <input type="submit" value="Confirm">
+    </div>
+</form>
+{% endblock %}

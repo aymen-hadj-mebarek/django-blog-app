@@ -53,3 +53,20 @@ hr {
     height: 1px;
     background: #ddd;
 }
+
+.confirm_form{
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(255,255,255,0.7);
+}
+
+.confirm_form .container{
+    border-radius: 25px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 30px;
+    padding: 50px;
+}
