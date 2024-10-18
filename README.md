@@ -1,5 +1,5 @@
 # Django Blog App : 
-this web app is for learning purposes where we can divide the whole process into 11 chapters that will  be updated when i finish each one of them.
+this web app is for learning purposes where we can divide the whole process into 3 chapters that will  be updated when i finish each one of them.
 
 **this project was made by following the book `Django for Beginners` by `WILLIAM S. VINCENT`**
 where you can but his book from [this link](https://djangoforbeginners.com/).
