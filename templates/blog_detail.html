@@ -5,16 +5,18 @@
 {% endblock %}
 
 {% block content %}
-<div class="blog-post">
-    <h2 class="blog-title">
-        <a href="{% url 'blog_details' blog.pk %}">{{ blog.title }}</a>
-    </h2>
-    <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
-    <hr>
-    <p class="blog-body">
-        {{ blog.body }}
-    </p>
-    <a href="{% url 'blog_update' blog.pk %}">Update the blog</a>
-    <a href="{% url 'blog_delete' blog.pk %}">Delete the blog</a>
+<div class="container">
+    <div class="blog-post my-4">
+        <h2 class="blog-title">
+            <a href="{% url 'blog_details' blog.pk %}" class="text-decoration-none">{{ blog.title }}</a>
+        </h2>
+        <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
+        <hr>
+        <p class="blog-body">
+            {{ blog.body }}
+        </p>
+        <a href="{% url 'blog_update' blog.pk %}" class="btn btn-warning">Update</a>
+        <a href="{% url 'blog_delete' blog.pk %}" class="btn btn-danger">Delete</a>
+    </div>
 </div>
 {% endblock %}

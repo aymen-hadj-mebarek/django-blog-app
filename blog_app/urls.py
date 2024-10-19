@@ -19,5 +19,11 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls'))
+    path('blog/', include('blog.urls')),
+    
+    path('accounts/', include('django.contrib.auth.urls')), 
+    #! this is specified for the login, and log out
+    path('accounts/', include('accounts.urls')),
+    #! this is specified for our sign-up view
+
 ]

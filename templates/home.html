@@ -5,18 +5,32 @@
 {% endblock %}
 
 {% block content %}
-    <div class="blogs-container">
-        {% for blog in blogsList %}
-        <div class="blog-post">
-            <h2 class="blog-title">
-                <a href="{% url 'blog_details' blog.pk %}">{{ blog.title }}</a>
-            </h2>
-            <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
-            <hr>
-            <p class="blog-body">
-                {{ blog.body }}
-            </p>
+    {% if user.is_authenticated %}
+    <div class="container">
+        <h1 class="my-4">Hello, {{ user.username }}</h1>
+        <form action="{% url 'logout' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+
+        <div class="blogs-container mt-4">
+            {% for blog in blogsList %}
+            <div class="blog-post mb-4">
+                <h2 class="blog-title">
+                    <a href="{% url 'blog_details' blog.pk %}" class="text-decoration-none">{{ blog.title }}</a>
+                </h2>
+                <p class="blog-author">Written by <strong>{{ blog.author }}</strong></p>
+                <hr>
+                <p class="blog-body">
+                    {{ blog.body }}
+                </p>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
+    {% else %}
+    <div class="container">
+        <p>You need to log in from <a href="{% url 'login' %}">here</a></p>
+    </div>
+    {% endif %}
 {% endblock %}

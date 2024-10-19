@@ -7,11 +7,14 @@ from .models import BlogModel
 # Create your tests here.
 class BlogTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create(
+        #! for creating a fake user 
+        self.user = get_user_model().objects.create_user(
             username= 'testuser',
             email= 'testuser@example.com',
             password= 'testpassword'
         )        
+        
+        
         self.blog = BlogModel.objects.create(
             title='the test blog',
             body='the blog of today is about a little thing',
@@ -31,7 +34,9 @@ class BlogTests(TestCase):
         
     #* now we test the post list view
     #? in this we are going to test the view, that it exists and has the correct data, and the correct template
-    def test_blog_list_view(self):
+    def test_blog_list_view_logged_in(self):
+        #! Log in the user first
+        self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('home_page'))
         # response = self.client.get('/blog/') 
         
@@ -41,6 +46,17 @@ class BlogTests(TestCase):
         self.assertTemplateUsed(response, "home.html")
         #? finally we check if a title of the blog is in the page
         self.assertContains(response, self.blog)
+        
+    def test_blog_list_view_logged_out(self):
+        response = self.client.get(reverse('home_page'))
+        
+        #? we start by comparing the status code : 200 means the page exists
+        self.assertEqual(response.status_code, 200)
+        #? then we check the template used in this page
+        self.assertTemplateUsed(response, "home.html")
+        #? finally we check if a title of the blog is in the page
+        self.assertNotContains(response, self.blog)
+        self.assertContains(response, "You need to log in from")
         
     
     #* now we test the post detail view (i will tempte to do this myself)
@@ -87,4 +103,17 @@ class BlogTests(TestCase):
         response = self.client.post(reverse('blog_delete', args='1'))
         self.assertEqual(response.status_code, 302)   # 302 means redirected to a new page
         self.assertFalse(BlogModel.objects.filter(pk=self.blog.id).exists()) # this should check that the database is empty now
+        
+    def test_logging_in(self):
+        response = self.client.post(reverse('login'),{'username':"testuser", 'password':"testpassword"})
+        self.assertEqual(response.status_code, 302) 
+        self.assertTemplateUsed("login.html")
+        self.assertTemplateUsed("home.html")
+        
+    def test_signin_up(self):
+        response = self.client.post(reverse('sign_up'),{'username':"test2user", 'password':"test2password", 'password2':"test2password"})
+        
+        self.assertEqual(response.status_code, 200) 
+        self.assertTemplateUsed("signup.html")
+        self.assertTemplateUsed("home.html")
         
