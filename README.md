@@ -1,6 +1,8 @@
 # Django Blog App : 
 this web app is for learning purposes where we can divide the whole process into 3 chapters that will  be updated when i finish each one of them.
 
+*(i may add a 4th chapter concerning roles and permissions)*
+
 **this project was made by following the book `Django for Beginners` by `WILLIAM S. VINCENT`**
 where you can but his book from [this link](https://djangoforbeginners.com/).
 
@@ -260,3 +262,103 @@ to resume how the forms work we can just say :
 - **Creating new blog :** go to URL of adding ➔ filling the form ➔ automatically adding the blog
 - **updating the blog :** selecting the blog to update ➔ updating the fields desired ➔ automatic update by **Django**
 - **Deleting a blog :** select the blog to delete ➔ confirmation of delete ➔ redirecting to home page
+
+# CHAPTER 3 : `AUTHENTIFICATION`
+Finally, we will get in the authentication part, where we will learn about **Log in**, **Log ou** and **Sign Up**.
+
+So let's dive into it : 
+## 1. Login In/Out :
+for logging in in to the application, **django** made it really simple, all we need is to include the views of the `logging in` in the urls of the main project : 
+```python
+# in file : blog_app/urls.py
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog/', include('blog.urls')),
+    
+    path('accounts/', include('django.contrib.auth.urls')), # this is the new line
+]
+```
+
+After that the `views` responsible for logging in and logging out are already made, all we need is to implement their urls in our application.
+- **Log In :** this will require its own template, and django requires that it will be in folder named `registration`, so the files will be : 
+```powershell
+.
+├── blog
+├── blog_app
+├── db.sqlite3
+├── manage.py
+├── README.md
+├── static
+└── templates
+    ├── # all the templates
+    └── registration
+        └── login.html
+```
+
+then all we need is to implement the form that is directly provided by django in our template. *Just like we did for creating new blog*
+- **Log Out :** this will **not** require a template but only a `URL` that is already available *thanks to django*
+the best way is to make a form that will send you in a post method
+```html
+<form action="{% url 'logout' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+```
+
+## 2. Signing Up :
+As for the sign up process, we will require an mini-app for its own, so that's what we are going to do :
+```powershell
+python manage.py startapp accounts
+```
+then we associate their `url` and `views` as we did for `blog` app.
+
+So we will have :
+```python
+# in file : blog_app/urls.py
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('blog/', include('blog.urls')),
+    path('accounts/', include('django.contrib.auth.urls')), 
+
+    path('accounts/', include('accounts.urls')), # our new mini-app
+]
+```
+
+then what we need is to create our view that will have the form required for signing up a new user : 
+```python
+# in file : accounts/views.py
+
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
+
+class SignUPView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('home_page')
+    template_name ='registration/signup.html'
+# you can see that i saved the template in the same folder as login, this is not required
+```
+as for the urls, no big deal just regular url associated with the view that we just created: 
+```python
+# in file : accounts/urls.py
+
+from django.urls import path
+from .views import *
+
+urlpatterns = [
+    path('signup/', SignUPView.as_view(), name='sign_up'),
+]
+```
+
+Now, we create our template, and we're done :
+```html
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Sign Up</button>
+</form>
+```
+
+this will automatically create our form for us.
